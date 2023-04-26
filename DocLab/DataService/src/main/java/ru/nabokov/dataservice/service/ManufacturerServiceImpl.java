@@ -42,6 +42,12 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     }
 
     @Override
+    public Manufacturer get(Long id) {
+        return repository.findById(id)
+                      .orElseThrow(() -> new NotFoundException(String.format("Manufacturer with id=%s not found", id)));
+    }
+
+    @Override
     public List<ManufacturerDto> getAll() {
         return mapper.mapToManufacturersDto(repository.findAll());
     }

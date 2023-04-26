@@ -42,6 +42,12 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    public Organization get(Long id) {
+        return repository.findById(id).orElseThrow(() -> new NotFoundException(
+                                        String.format("Organization with id=%S not found for license",id)));
+    }
+
+    @Override
     public List<OrganizationDto> getAll() {
         return mapper.mapToOrganizationsDto(repository.findAll());
     }
