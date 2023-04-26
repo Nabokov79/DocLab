@@ -15,7 +15,7 @@ import ru.nabokov.dataservice.service.BranchService;
 
 @RestController
 @RequestMapping(
-        value = "/admin/branch",
+        value = "/data/branch",
         consumes = MediaType.ALL_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor

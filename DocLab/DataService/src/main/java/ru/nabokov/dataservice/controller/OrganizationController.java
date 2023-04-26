@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(
-        value = "/admin/organizations",
+        value = "/data/organizations",
         consumes = MediaType.ALL_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
