@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.nabokov.passportservice.dto.client.ObjectDataDto;
-import ru.nabokov.passportservice.dto.client.Organization;
+import ru.nabokov.passportservice.dto.client.OrganizationDto;
 import ru.nabokov.passportservice.dto.client.TypeDto;
 
 import java.util.Objects;
@@ -33,11 +33,11 @@ public class DataClient {
                 .getBody();
     }
 
-    public Organization getOrganization(String uri) {
+    public OrganizationDto getOrganization(String uri) {
         return Objects.requireNonNull(webClient.get()
                         .uri(uri)
                         .retrieve()
-                        .toEntity(Organization.class)
+                        .toEntity(OrganizationDto.class)
                         .block())
                 .getBody();
     }
