@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="DataService" />
+        <module name="PassportService" />
       </profile>
     </annotationProcessing>
   </component>
@@ -15,6 +16,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="DataService" options="-parameters" />
       <module name="DocLab" options="-parameters" />
+      <module name="PassportService" options="-parameters" />
     </option>
   </component>
 </project>
