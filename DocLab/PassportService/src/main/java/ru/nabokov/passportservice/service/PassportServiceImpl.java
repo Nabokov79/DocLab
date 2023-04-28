@@ -1,0 +1,70 @@
+package ru.nabokov.passportservice.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import ru.nabokov.passportservice.client.PassportClient;
+import ru.nabokov.passportservice.dto.passport.NewPassportDto;
+import ru.nabokov.passportservice.dto.passport.PassportDto;
+import ru.nabokov.passportservice.dto.passport.UpdatePassportDto;
+import ru.nabokov.passportservice.exceptions.BadRequestException;
+import ru.nabokov.passportservice.exceptions.NotFoundException;
+import ru.nabokov.passportservice.mapper.PassportMapper;
+import ru.nabokov.passportservice.model.Passport;
+import ru.nabokov.passportservice.repository.PassportRepository;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class PassportServiceImpl implements PassportService {
+
+    private final PassportRepository repository;
+    private final PassportMapper mapper;
+    private final PassportClient client;
+
+    @Override
+    public PassportDto save(NewPassportDto passportDto) {
+        if (repository.existsByObjectDataId(passportDto.getObjectDataId())) {
+            throw new BadRequestException((String.format("Passport for object data with id=%s found",
+                                                                                       passportDto.getObjectDataId())));
+        }
+        Passport passport = mapper.mapFromNewPassportDto(passportDto);
+        PassportDto passportDTO = mapper.mapToPassportDto(repository.save(passport));
+        passportDTO.setObjectData(client.getObjectData(passportDto.getObjectDataId()));
+        return passportDTO;
+    }
+
+    @Override
+    public PassportDto update(UpdatePassportDto passportDto) {
+        if (repository.existsById(passportDto.getId())) {
+            throw new NotFoundException((String.format("Passport with id=%s not found for save", passportDto.getId())));
+        }
+        Passport passport = mapper.mapFromUpdatePassportDto(passportDto);
+        PassportDto passportDTO = mapper.mapToPassportDto(repository.save(passport));
+        passportDTO.setObjectData(client.getObjectData(passportDto.getObjectDataId()));
+        return passportDTO;
+    }
+
+    @Override
+    public Passport get(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Passport with id=%s not found for save", id)));
+    }
+
+    @Override
+    public List<Passport> getAll() {
+        List<Passport> passports = repository.findAll();
+        if (passports.isEmpty()) {
+            throw new NotFoundException(String.format("Passports not found, passports=%s", passports));
+        }
+        return passports;
+    }
+
+    @Override
+    public void delete(Long id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return;
+        }
+        throw new NotFoundException(String.format("Protection with id=%s not found for delete", id));
+    }
+}
