@@ -19,6 +19,7 @@
 
 	<modules>
 		<module>DataService</module>
+		<module>PassportService</module>
 	</modules>
 
 	<properties>
