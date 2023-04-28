@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import ru.nabokov.passportservice.dto.client.ObjectDataDto;
-import ru.nabokov.passportservice.dto.client.Organization;
+import ru.nabokov.passportservice.dto.client.OrganizationDto;
 import java.time.LocalDate;
 
 @Setter
@@ -23,5 +23,5 @@ public class RepairDto {
     @Schema(description = "Описание ремонта")
     private String description;
     @Schema(description = "Организация, выполнившая ремонт")
-    private Organization organization;
+    private OrganizationDto organization;
 }
