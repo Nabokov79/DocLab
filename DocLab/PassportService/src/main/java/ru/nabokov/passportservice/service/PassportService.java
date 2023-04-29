@@ -12,7 +12,7 @@ public interface PassportService {
 
     Passport get(Long id);
 
-    List<Passport> getAll();
+    List<Passport> getAll(Long typeId);
 
    void delete(Long id);
 }
