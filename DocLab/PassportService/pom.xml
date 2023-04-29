@@ -13,7 +13,7 @@
     <artifactId>PassportService</artifactId>
     <version>1.0.0</version>
 
-    <name>PassportService</name>
+    <name>Passport-Service</name>
 
     <dependencies>
         <dependency>

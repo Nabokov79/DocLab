@@ -13,7 +13,7 @@
     <artifactId>DataService</artifactId>
     <version>1.0.0</version>
 
-    <name>DataService</name>
+    <name>Data-Service</name>
 
     <dependencies>
         <dependency>

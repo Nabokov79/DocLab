@@ -7,16 +7,16 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="DataService" />
-        <module name="PassportService" />
+        <module name="data-service" />
+        <module name="passport-service" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="DataService" options="-parameters" />
       <module name="DocLab" options="-parameters" />
-      <module name="PassportService" options="-parameters" />
+      <module name="data-service" options="-parameters" />
+      <module name="passport-service" options="-parameters" />
     </option>
   </component>
 </project>
