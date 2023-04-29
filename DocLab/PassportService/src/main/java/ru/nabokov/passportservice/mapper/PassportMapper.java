@@ -1,8 +1,6 @@
 package ru.nabokov.passportservice.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import ru.nabokov.passportservice.dto.client.ObjectDataDto;
 import ru.nabokov.passportservice.dto.passport.*;
 import ru.nabokov.passportservice.model.Passport;
 import java.util.List;

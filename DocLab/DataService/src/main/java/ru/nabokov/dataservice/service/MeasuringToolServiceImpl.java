@@ -11,6 +11,7 @@ import ru.nabokov.dataservice.exceptions.NotFoundException;
 import ru.nabokov.dataservice.mapper.BranchMapper;
 import ru.nabokov.dataservice.mapper.EmployeeMapper;
 import ru.nabokov.dataservice.mapper.MeasuringToolMapper;
+import ru.nabokov.dataservice.mapper.OrganizationMapper;
 import ru.nabokov.dataservice.model.MeasuringTool;
 import ru.nabokov.dataservice.model.QMeasuringTool;
 import ru.nabokov.dataservice.repository.MeasuringToolRepository;
@@ -24,6 +25,7 @@ public class MeasuringToolServiceImpl implements MeasuringToolService {
     private final MeasuringToolMapper mapper;
     private final EntityManager entityManager;
     private final OrganizationService organizationService;
+    private final OrganizationMapper organizationMapper;
     private final EmployeeMapper employeeMapper;
     private final EmployeeService employeeService;
     private final ManufacturerService manufacturerService;
@@ -102,7 +104,9 @@ public class MeasuringToolServiceImpl implements MeasuringToolService {
 
     public MeasuringTool setMeasuringToolValue(MeasuringTool measuringTool, MeasuringToolIds ids) {
         measuringTool.setType(controlTypeService.get(ids.getTypeId()));
-        measuringTool.setOrganization(organizationService.get(ids.getOrganizationId()));
+        measuringTool.setOrganization(
+                organizationMapper.mapToOrganization(organizationService.get(ids.getOrganizationId()))
+        );
         measuringTool.setEmployee(employeeMapper.mapToEmployee(employeeService.get(ids.getUserId())));
         measuringTool.setManufacturer(manufacturerService.get(ids.getManufacturerId()));
         measuringTool.setBranch(branchMapper.mapToBranch(branchService.get(ids.getOwnerId())));

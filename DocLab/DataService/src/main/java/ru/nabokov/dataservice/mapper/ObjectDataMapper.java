@@ -18,4 +18,6 @@ public interface ObjectDataMapper {
     ObjectDataDto mapToObjectDataDto(ObjectData objectData);
 
     List<ObjectDataDto> mapToObjectsDataDto(List<ObjectData> objectsData);
+
+    ObjectData mapToObjectData(ObjectDataDto objectDataDto);
 }
