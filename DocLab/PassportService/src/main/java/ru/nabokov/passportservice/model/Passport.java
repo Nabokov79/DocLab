@@ -17,6 +17,8 @@ public class Passport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "type_id")
+    private Long typeId;
     @Column(name = "object_data_id")
     private Long objectDataId;
     @Column(name = "author_id")
