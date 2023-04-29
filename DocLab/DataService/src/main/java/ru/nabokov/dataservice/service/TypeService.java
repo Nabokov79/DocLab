@@ -13,7 +13,7 @@ public interface TypeService {
 
     TypeDto update(UpdateTypeDto typeDto);
 
-    Type get(Long id);
+    TypeDto get(Long id);
 
     List<TypeDto> getAll();
 }

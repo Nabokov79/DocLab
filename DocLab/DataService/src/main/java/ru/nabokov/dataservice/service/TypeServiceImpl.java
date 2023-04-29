@@ -38,9 +38,9 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
-    public Type get(Long id) {
-        return repository.findById(id)
-                         .orElseThrow(() -> new NotFoundException(String.format("Type with id=%s not found", id)));
+    public TypeDto get(Long id) {
+        return mapper.mapToTypeDto(repository.findById(id)
+                             .orElseThrow(() -> new NotFoundException(String.format("Type with id=%s not found", id))));
     }
 
     @Override

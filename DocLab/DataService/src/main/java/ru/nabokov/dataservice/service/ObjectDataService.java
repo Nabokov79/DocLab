@@ -13,7 +13,7 @@ public interface ObjectDataService {
 
     ObjectDataDto update(UpdateObjectDataDto objectDataDto);
 
-    ObjectData get(Long id);
+    ObjectDataDto get(Long id);
 
     List<ObjectDataDto> getAll(Long typeId);
 
