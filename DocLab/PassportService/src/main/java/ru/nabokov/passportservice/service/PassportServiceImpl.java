@@ -3,6 +3,7 @@ package ru.nabokov.passportservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.nabokov.passportservice.client.PassportClient;
+import ru.nabokov.passportservice.dto.client.ObjectDataDto;
 import ru.nabokov.passportservice.dto.passport.NewPassportDto;
 import ru.nabokov.passportservice.dto.passport.PassportDto;
 import ru.nabokov.passportservice.dto.passport.UpdatePassportDto;
@@ -11,6 +12,8 @@ import ru.nabokov.passportservice.exceptions.NotFoundException;
 import ru.nabokov.passportservice.mapper.PassportMapper;
 import ru.nabokov.passportservice.model.Passport;
 import ru.nabokov.passportservice.repository.PassportRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,8 +31,10 @@ public class PassportServiceImpl implements PassportService {
                                                                                        passportDto.getObjectDataId())));
         }
         Passport passport = mapper.mapFromNewPassportDto(passportDto);
+        ObjectDataDto objectData = client.getObjectData(passportDto.getObjectDataId());
+        passport.setTypeId(objectData.getType().getId());
         PassportDto passportDTO = mapper.mapToPassportDto(repository.save(passport));
-        passportDTO.setObjectData(client.getObjectData(passportDto.getObjectDataId()));
+        passportDTO.setObjectData(objectData);
         return passportDTO;
     }
 
@@ -39,8 +44,10 @@ public class PassportServiceImpl implements PassportService {
             throw new NotFoundException((String.format("Passport with id=%s not found for save", passportDto.getId())));
         }
         Passport passport = mapper.mapFromUpdatePassportDto(passportDto);
+        ObjectDataDto objectData = client.getObjectData(passportDto.getObjectDataId());
+        passport.setTypeId(objectData.getType().getId());
         PassportDto passportDTO = mapper.mapToPassportDto(repository.save(passport));
-        passportDTO.setObjectData(client.getObjectData(passportDto.getObjectDataId()));
+        passportDTO.setObjectData(objectData);
         return passportDTO;
     }
 
@@ -51,8 +58,13 @@ public class PassportServiceImpl implements PassportService {
     }
 
     @Override
-    public List<Passport> getAll() {
-        List<Passport> passports = repository.findAll();
+    public List<Passport> getAll(Long typeId) {
+        List<Passport> passports;
+        if (typeId != null) {
+            passports = new ArrayList<>(repository.findAllByTypeId(typeId));
+        } else {
+            passports = repository.findAll();
+        }
         if (passports.isEmpty()) {
             throw new NotFoundException(String.format("Passports not found, passports=%s", passports));
         }
@@ -65,6 +77,6 @@ public class PassportServiceImpl implements PassportService {
             repository.deleteById(id);
             return;
         }
-        throw new NotFoundException(String.format("Protection with id=%s not found for delete", id));
+        throw new NotFoundException(String.format("Passports with id=%s not found for delete", id));
     }
 }
