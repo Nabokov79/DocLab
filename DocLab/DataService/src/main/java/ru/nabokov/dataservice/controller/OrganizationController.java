@@ -41,6 +41,12 @@ public class OrganizationController {
         return ResponseEntity.ok().body(service.update(organizationDto));
     }
 
+    @Operation(summary = "Получение данных организации")
+    @GetMapping("/{id}")
+    public ResponseEntity<OrganizationDto> get(@PathVariable @Parameter(description = "Индентификатор") Long id) {
+        return ResponseEntity.ok().body(service.get(id));
+    }
+
     @Operation(summary = "Получение данных организаций")
     @GetMapping
     public ResponseEntity<List<OrganizationDto>> getAll() {

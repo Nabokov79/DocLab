@@ -29,19 +29,29 @@ public class ObjectDataController {
 
     @Operation(summary = "Добавление данных объекта")
     @PostMapping
-    public ResponseEntity<ObjectDataDto> save(@RequestBody @Parameter(description = "Данные объекта") NewObjectDataDto objectDataDto) {
+    public ResponseEntity<ObjectDataDto> save(
+                               @RequestBody @Parameter(description = "Данные объекта") NewObjectDataDto objectDataDto) {
         return ResponseEntity.ok().body(service.save(objectDataDto));
     }
 
     @Operation(summary = "Изменение данных объекта")
     @PatchMapping
-    public ResponseEntity<ObjectDataDto> update(@RequestBody @Parameter(description = "Данные объекта") UpdateObjectDataDto objectDataDto) {
+    public ResponseEntity<ObjectDataDto> update(
+                            @RequestBody @Parameter(description = "Данные объекта") UpdateObjectDataDto objectDataDto) {
         return ResponseEntity.ok().body(service.update(objectDataDto));
+    }
+
+    @Operation(summary = "Получение данных объекта")
+    @GetMapping("/{id}")
+    public ResponseEntity<ObjectDataDto> get(@PathVariable @Parameter(description = "Индентификатор") Long id) {
+        return ResponseEntity.ok().body(service.get(id));
     }
 
     @Operation(summary = "Получение данных объектов")
     @GetMapping
-    public ResponseEntity<List<ObjectDataDto>> getAll(@RequestParam(required = false) @Parameter(description = "Индентификатор объекта") Long typeId) {
+    public ResponseEntity<List<ObjectDataDto>> getAll(
+                                                  @RequestParam(required = false)
+                                                  @Parameter(description = "Индентификатор типа объекта") Long typeId) {
         return ResponseEntity.ok().body(service.getAll(typeId));
     }
 

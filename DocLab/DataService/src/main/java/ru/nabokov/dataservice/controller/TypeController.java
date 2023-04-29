@@ -40,6 +40,12 @@ public class TypeController {
     }
 
     @Operation(summary = "Получение данных типа объекта")
+    @GetMapping("/{id}")
+    public ResponseEntity<TypeDto> get(@PathVariable @Parameter(description = "Индентификатор") Long id) {
+        return ResponseEntity.ok().body(service.get(id));
+    }
+
+    @Operation(summary = "Получение данных типа объекта")
     @GetMapping
     public ResponseEntity<List<TypeDto>> getAll() {
         return ResponseEntity.ok().body(service.getAll());
