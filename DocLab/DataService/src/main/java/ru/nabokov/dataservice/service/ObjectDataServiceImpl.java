@@ -8,6 +8,7 @@ import ru.nabokov.dataservice.dto.objectData.UpdateObjectDataDto;
 import ru.nabokov.dataservice.exceptions.BadRequestException;
 import ru.nabokov.dataservice.exceptions.NotFoundException;
 import ru.nabokov.dataservice.mapper.ObjectDataMapper;
+import ru.nabokov.dataservice.mapper.TypeMapper;
 import ru.nabokov.dataservice.model.ObjectData;
 import ru.nabokov.dataservice.repository.ObjectDataRepository;
 
@@ -21,12 +22,13 @@ public class ObjectDataServiceImpl implements ObjectDataService {
     private final ObjectDataRepository repository;
     private final ObjectDataMapper mapper;
     private final TypeService typeService;
+    private final TypeMapper typeMapper;
     private final BuildingService buildingService;
 
     @Override
     public ObjectDataDto save(NewObjectDataDto objectDataDto) {
         ObjectData object = mapper.mapToNewObjectData(objectDataDto);
-        object.setType(typeService.get(objectDataDto.getTypeId()));
+        object.setType(typeMapper.mapToType(typeService.get(objectDataDto.getTypeId())));
         object.setBuilding(buildingService.get(objectDataDto.getBuildingId()));
         return mapper.mapToObjectDataDto(repository.save(object));
     }
@@ -39,7 +41,7 @@ public class ObjectDataServiceImpl implements ObjectDataService {
             );
         }
         ObjectData object = mapper.mapToUpdateObjectData(objectDataDto);
-        object.setType(typeService.get(objectDataDto.getTypeId()));
+        object.setType(typeMapper.mapToType(typeService.get(objectDataDto.getTypeId())));
         object.setBuilding(buildingService.get(objectDataDto.getBuildingId()));
         return mapper.mapToObjectDataDto(repository.save(object));
     }
@@ -49,20 +51,22 @@ public class ObjectDataServiceImpl implements ObjectDataService {
         if (typeId == null) {
             return mapper.mapToObjectsDataDto(repository.findAll());
         } else {
-            return mapper.mapToObjectsDataDto(new ArrayList<>(repository.findAllByType(typeService.get(typeId))));
+            return mapper.mapToObjectsDataDto(
+                    new ArrayList<>(repository.findAllByType(typeMapper.mapToType(typeService.get(typeId))))
+            );
         }
     }
 
     @Override
-    public ObjectData get(Long id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException(
+    public ObjectDataDto get(Long id) {
+        return mapper.mapToObjectDataDto(repository.findById(id).orElseThrow(() -> new NotFoundException(
                 String.format(String.format("Object data with id=%s not found", id)))
-        );
+        ));
     }
 
     @Override
     public String delete(Long id) {
-        ObjectData object = get(id);
+        ObjectDataDto object = get(id);
         repository.deleteById(id);
         return object.getType().getName();
     }
