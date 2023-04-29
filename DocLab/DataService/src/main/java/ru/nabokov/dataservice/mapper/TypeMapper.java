@@ -17,4 +17,6 @@ public interface TypeMapper {
     Type mapToUpdateType(UpdateTypeDto typeDto);
 
     List<TypeDto> mapToTypesDto(List<Type> types);
+
+    Type mapToType(TypeDto typeDto);
 }
