@@ -18,10 +18,6 @@ public class UpdatePipelineNormDto {
     @NotNull(message = " id standard and norm pipe should not be blank")
     @Positive(message = "id standard and norm pipe can only be positive")
     private Long id;
-    @Schema(description = "Индентификатор назначения трубопровода")
-    @NotNull(message = "type id should not be blank")
-    @Positive(message = "type id author must be positive")
-    private Long typeId;
     @Schema(description = "Диаметр")
     @NotNull(message = "diameter should not be blank")
     @Positive(message = "diameter can only be positive")

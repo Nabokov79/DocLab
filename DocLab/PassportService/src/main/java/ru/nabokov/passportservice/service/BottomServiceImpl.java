@@ -2,7 +2,6 @@ package ru.nabokov.passportservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.nabokov.passportservice.dto.bottom.BottomDto;
 import ru.nabokov.passportservice.dto.bottom.NewBottomDto;
 import ru.nabokov.passportservice.dto.bottom.UpdateBottomDto;
 import ru.nabokov.passportservice.exceptions.NotFoundException;
@@ -22,38 +21,33 @@ public class BottomServiceImpl implements BottomService {
     private final BottomMapper mapper;
 
     @Override
-    public List<BottomDto> save(List<NewBottomDto> bottomsDto) {
+    public List<Bottom> save(Long typeId, List<NewBottomDto> bottomsDto) {
         List<Bottom> bottoms = mapper.mapToNewBottoms(bottomsDto);
-        return mapper.mapToBottomsDto(repository.saveAll(bottoms));
+        for (Bottom bottom : bottoms) {
+            bottom.setTypeId(typeId);
+        }
+        return repository.saveAll(bottoms);
     }
 
     @Override
-    public List<BottomDto> update(List<UpdateBottomDto> bottomsDto) {
+    public List<Bottom> update(Long typeId, List<UpdateBottomDto> bottomsDto) {
         validateIds(bottomsDto.stream().map(UpdateBottomDto::getId).toList());
         List<Bottom> bottoms = mapper.mapToUpdateBottoms(bottomsDto);
-        return mapper.mapToBottomsDto(repository.saveAll(bottoms));
+        for (Bottom bottom : bottoms) {
+            bottom.setTypeId(typeId);
+        }
+        return repository.saveAll(bottoms);
     }
 
     @Override
-    public List<BottomDto> getAll(Integer volume) {
+    public List<Bottom> getAll(Integer volume, Long typeId) {
         List<Bottom> bottoms;
         if (volume != null) {
-             bottoms = repository.findAllByVolume(volume);
+             bottoms = repository.findAllByVolumeAndTypeId(volume, typeId);
         } else {
             bottoms = repository.findAllBottoms();
         }
-        if (bottoms.isEmpty()) {
-            throw new NotFoundException(String.format("Bottom not found, bottoms=%s", bottoms));
-        }
-        return mapper.mapToBottomsDto(bottoms);
-    }
-
-    @Override
-    public void delete(Long botId) {
-        if (repository.existsById(botId)) {
-            repository.deleteById(botId);
-        }
-        throw new NotFoundException(String.format("bottom with id = %s not found for delete", botId));
+        return bottoms;
     }
 
     private void validateIds(List<Long> ids) {

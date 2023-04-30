@@ -7,6 +7,7 @@ import ru.nabokov.passportservice.dto.client.ObjectDataDto;
 import ru.nabokov.passportservice.dto.client.OrganizationDto;
 import ru.nabokov.passportservice.dto.client.TypeDto;
 
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -24,6 +25,18 @@ public class DataClient {
                 .getBody();
     }
 
+    public List<ObjectDataDto> getObjectsData(String path, Long typeId) {
+        return Objects.requireNonNull(webClient.get()
+                        .uri(uriBuilder -> uriBuilder
+                                .path(path)
+                                .queryParam("typeId", typeId)
+                                .build())
+                        .retrieve()
+                        .toEntityList(ObjectDataDto.class)
+                        .block())
+                .getBody();
+    }
+
     public TypeDto getType(String uri) {
         return Objects.requireNonNull(webClient.get()
                         .uri(uri)
@@ -33,11 +46,14 @@ public class DataClient {
                 .getBody();
     }
 
-    public OrganizationDto getOrganization(String uri) {
+    public List<OrganizationDto> getOrganizations(String path, String ids) {
         return Objects.requireNonNull(webClient.get()
-                        .uri(uri)
+                        .uri(uriBuilder -> uriBuilder
+                                .path(path)
+                                .queryParam("ids", ids)
+                                .build())
                         .retrieve()
-                        .toEntity(OrganizationDto.class)
+                        .toEntityList(OrganizationDto.class)
                         .block())
                 .getBody();
     }

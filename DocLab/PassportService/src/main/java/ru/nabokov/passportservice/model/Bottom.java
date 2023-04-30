@@ -17,6 +17,8 @@ public class Bottom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "type_id")
+    private Long typeId;
     @Column(name = "volume")
     private Integer volume;
     @Column(name = "name")

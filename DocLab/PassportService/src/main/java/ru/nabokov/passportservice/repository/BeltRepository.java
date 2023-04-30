@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BeltRepository extends JpaRepository<Belt, Long> {
 
-    List<Belt> findAllByVolume(Integer volume);
+    List<Belt> findAllByVolumeAndTypeId(Integer volume, Long typeId);
 
     @Query("select b from Belt b group by b.volume")
     List<Belt> findAllBottoms();

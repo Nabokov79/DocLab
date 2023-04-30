@@ -5,13 +5,14 @@ import ru.nabokov.passportservice.dto.repair.NewRepairDto;
 import ru.nabokov.passportservice.dto.repair.RepairDto;
 import ru.nabokov.passportservice.dto.repair.UpdateRepairDto;
 import ru.nabokov.passportservice.model.Repair;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface RepairMapper {
 
-    Repair mapToNewRepair(NewRepairDto repairDto);
+    List<Repair> mapToNewRepairs(List<NewRepairDto> repairsDto);
 
-    RepairDto mapToRepairDto(Repair repair);
+    RepairDto mapToRepairsDto(Repair repair);
 
-    Repair mapToUpdateRepair(UpdateRepairDto repairDto);
+    List<Repair> mapToUpdateRepairs(List<UpdateRepairDto> repairsDto);
 }

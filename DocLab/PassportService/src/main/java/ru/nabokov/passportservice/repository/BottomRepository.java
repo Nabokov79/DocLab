@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BottomRepository extends JpaRepository<Bottom, Long> {
 
-    List<Bottom> findAllByVolume(Integer volume);
+    List<Bottom> findAllByVolumeAndTypeId(Integer volume, Long typeId);
 
     @Query("select b from Bottom b group by b.volume")
     List<Bottom> findAllBottoms();

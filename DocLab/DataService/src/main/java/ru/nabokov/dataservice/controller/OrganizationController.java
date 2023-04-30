@@ -49,8 +49,9 @@ public class OrganizationController {
 
     @Operation(summary = "Получение данных организаций")
     @GetMapping
-    public ResponseEntity<List<OrganizationDto>> getAll() {
-        return ResponseEntity.ok().body(service.getAll());
+    public ResponseEntity<List<OrganizationDto>> getAll(
+            @RequestParam(required = false) @Parameter(description = "Список индентификаторов") String ids) {
+        return ResponseEntity.ok().body(service.getAll(ids));
     }
 
     @Operation(summary = "Удаление данных организации")

@@ -2,7 +2,6 @@ package ru.nabokov.passportservice.mapper;
 
 import org.mapstruct.Mapper;
 import ru.nabokov.passportservice.dto.pipelinenorm.NewPipelineNormDto;
-import ru.nabokov.passportservice.dto.pipelinenorm.PipelineNormDto;
 import ru.nabokov.passportservice.dto.pipelinenorm.UpdatePipelineNormDto;
 import ru.nabokov.passportservice.model.PipelineNorm;
 
@@ -14,6 +13,4 @@ public interface PipelineNormMapper {
     List<PipelineNorm> mapToNewPipelineNorm(List<NewPipelineNormDto> pipelineNormsDto);
 
     List<PipelineNorm> mapToUpdatePipelineNorm(List<UpdatePipelineNormDto> pipelineNormsDto);
-
-    List<PipelineNormDto> mapToPipelineNormDto(List<PipelineNorm> pipelineNorms);
 }

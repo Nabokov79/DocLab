@@ -6,12 +6,14 @@ import ru.nabokov.passportservice.dto.survey.SurveyDto;
 import ru.nabokov.passportservice.dto.survey.UpdateSurveyDto;
 import ru.nabokov.passportservice.model.Survey;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface SurveyMapper {
 
-    Survey mapToNewSurvey(NewSurveyDto surveyDto);
+    List<Survey> mapToNewSurveys(List<NewSurveyDto> surveysDto);
 
-    SurveyDto mapToSurveyDto(Survey survey);
+    SurveyDto mapToSurveysDto(Survey survey);
 
-    Survey mapToUpdateSurvey(UpdateSurveyDto surveyDto);
+    List<Survey> mapToUpdateSurveys(List<UpdateSurveyDto> surveysDto);
 }

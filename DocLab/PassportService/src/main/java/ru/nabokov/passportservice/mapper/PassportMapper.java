@@ -14,15 +14,6 @@ public interface PassportMapper {
 
     PassportDto mapToPassportDto(Passport passport);
 
-    List<PassportDto> mapToPassportDto(List<Passport> passports);
+    List<ShortPassportDto> mapToShortPassportDto(List<Passport> passports);
 
-    TankPassportDto mapToTankPassportDto(Passport passport);
-
-    PipelinePassportDto mapToPipelinePassportDto(Passport passport);
-
-    OilPipelinePassportDto mapToOilPipelinePassportDto(Passport passport);
-
-    FilterPassportDto mapToFilterPassportDto(Passport passport);
-
-    BoilerPassportDto mapToBoilerPassportDto(Passport passport);
 }

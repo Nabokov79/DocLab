@@ -13,6 +13,7 @@ import ru.nabokov.dataservice.model.ObjectData;
 import ru.nabokov.dataservice.repository.ObjectDataRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -47,14 +48,19 @@ public class ObjectDataServiceImpl implements ObjectDataService {
     }
 
     @Override
-    public List<ObjectDataDto> getAll(Long typeId) {
-        if (typeId == null) {
+    public List<ObjectDataDto> getAll(String ids, Long typeId) {
+        if (typeId == null && ids == null) {
             return mapper.mapToObjectsDataDto(repository.findAll());
-        } else {
-            return mapper.mapToObjectsDataDto(
-                    new ArrayList<>(repository.findAllByType(typeMapper.mapToType(typeService.get(typeId))))
+        }
+        if (ids != null) {
+            return  mapper.mapToObjectsDataDto(
+                    new ArrayList<>(repository.findAllByIds(
+                            Arrays.stream(ids.split(",")).toList().stream().mapToLong(Long::parseLong).boxed().toList())
+                    )
             );
         }
+        return mapper.mapToObjectsDataDto(
+                new ArrayList<>(repository.findAllByType(typeMapper.mapToType(typeService.get(typeId)))));
     }
 
     @Override

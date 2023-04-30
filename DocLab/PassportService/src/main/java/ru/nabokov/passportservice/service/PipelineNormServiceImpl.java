@@ -2,12 +2,8 @@ package ru.nabokov.passportservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.nabokov.passportservice.client.PassportClient;
 import ru.nabokov.passportservice.dto.pipelinenorm.NewPipelineNormDto;
-import ru.nabokov.passportservice.dto.pipelinenorm.PipelineNormDto;
 import ru.nabokov.passportservice.dto.pipelinenorm.UpdatePipelineNormDto;
-import ru.nabokov.passportservice.dto.client.TypeDto;
-import ru.nabokov.passportservice.exceptions.BadRequestException;
 import ru.nabokov.passportservice.exceptions.NotFoundException;
 import ru.nabokov.passportservice.mapper.PipelineNormMapper;
 import ru.nabokov.passportservice.model.PipelineNorm;
@@ -22,33 +18,30 @@ import java.util.stream.Collectors;
 public class PipelineNormServiceImpl implements PipelineNormService {
 
     private final PipelineNormRepository repository;
-    private final PassportClient client;
     private final PipelineNormMapper mapper;
 
     @Override
-    public List<PipelineNormDto> save(List<NewPipelineNormDto> pipesDto) {
-        return setType(pipesDto.stream().map(NewPipelineNormDto::getTypeId).distinct().toList(),
-                       mapper.mapToPipelineNormDto(repository.saveAll(mapper.mapToNewPipelineNorm(pipesDto))));
-    }
-
-    @Override
-    public List<PipelineNormDto> update(List<UpdatePipelineNormDto> pipesDto) {
-        validateIds(pipesDto.stream().map(UpdatePipelineNormDto:: getId).toList());
-        return setType(pipesDto.stream().map(UpdatePipelineNormDto::getTypeId).distinct().toList(),
-                mapper.mapToPipelineNormDto(repository.saveAll(mapper.mapToUpdatePipelineNorm(pipesDto))));
-    }
-
-    @Override
-    public List<PipelineNormDto> getAll(Long typeId) {
-        return mapper.mapToPipelineNormDto(repository.findAllByTypeId(typeId));
-    }
-
-    @Override
-    public void delete(Long staId) {
-        if (repository.existsById(staId)) {
-            repository.deleteById(staId);
+    public List<PipelineNorm> save(Long typeId, List<NewPipelineNormDto> pipesDto) {
+        List<PipelineNorm> pipelineNorms = mapper.mapToNewPipelineNorm(pipesDto);
+        for (PipelineNorm norm : pipelineNorms) {
+            norm.setTypeId(typeId);
         }
-        throw new NotFoundException(String.format("standard and norm pipe with id=%s not found for delete.", staId));
+        return repository.saveAll(pipelineNorms);
+    }
+
+    @Override
+    public List<PipelineNorm> update(Long typeId, List<UpdatePipelineNormDto> pipesDto) {
+        validateIds(pipesDto.stream().map(UpdatePipelineNormDto:: getId).toList());
+        List<PipelineNorm> pipelineNorms = mapper.mapToUpdatePipelineNorm(pipesDto);
+        for (PipelineNorm norm : pipelineNorms) {
+            norm.setTypeId(typeId);
+        }
+        return repository.saveAll(pipelineNorms);
+    }
+
+    @Override
+    public List<PipelineNorm> getAll(Long typeId) {
+        return repository.findAllByTypeId(typeId);
     }
 
     private void validateIds(List<Long> ids) {
@@ -59,17 +52,5 @@ public class PipelineNormServiceImpl implements PipelineNormService {
             ids = ids.stream().filter(e -> !idsDb.contains(e)).collect(Collectors.toList());
             throw new NotFoundException(String.format("pipeline norms with ids= %s not found", ids));
         }
-    }
-
-    private List<PipelineNormDto> setType(List<Long> ids, List<PipelineNormDto> pipelineNorms) {
-        if (ids.size() != 1) {
-            throw new BadRequestException(
-                    String.format("number of object types cannot exceed or be less than one, ids=%s", ids));
-        }
-        TypeDto type = client.getType(ids.get(0));
-        for (PipelineNormDto norm : pipelineNorms) {
-            norm.setType(type);
-        }
-        return pipelineNorms;
     }
 }

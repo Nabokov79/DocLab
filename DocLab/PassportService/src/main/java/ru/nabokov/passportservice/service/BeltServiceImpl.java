@@ -2,7 +2,6 @@ package ru.nabokov.passportservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.nabokov.passportservice.dto.belt.BeltDto;
 import ru.nabokov.passportservice.dto.belt.NewBeltDto;
 import ru.nabokov.passportservice.dto.belt.UpdateBeltDto;
 import ru.nabokov.passportservice.exceptions.NotFoundException;
@@ -22,38 +21,33 @@ public class BeltServiceImpl implements BeltService {
     private final BeltMapper mapper;
 
     @Override
-    public List<BeltDto> save(List<NewBeltDto> beltsDto) {
+    public List<Belt> save(Long typeId, List<NewBeltDto> beltsDto) {
         List<Belt> belts = mapper.mapToNewBelts(beltsDto);
-        return mapper.mapToBeltsDto(repository.saveAll(belts));
+        for (Belt belt : belts) {
+            belt.setTypeId(typeId);
+        }
+        return repository.saveAll(belts);
     }
 
     @Override
-    public List<BeltDto> update(List<UpdateBeltDto> beltsDto) {
+    public List<Belt> update(Long typeId, List<UpdateBeltDto> beltsDto) {
         validateIds( beltsDto.stream().map(UpdateBeltDto::getId).toList());
         List<Belt> belts = mapper.mapToUpdateBelts(beltsDto);
-        return mapper.mapToBeltsDto(repository.saveAll(belts));
+        for (Belt belt : belts) {
+            belt.setTypeId(typeId);
+        }
+        return repository.saveAll(belts);
     }
 
     @Override
-    public List<BeltDto> getAll(Integer volume) {
+    public List<Belt> getAll(Integer volume, Long typeId) {
         List<Belt> belts;
         if (volume != null) {
-            belts = repository.findAllByVolume(volume);
+            belts = repository.findAllByVolumeAndTypeId(volume, typeId);
         } else {
             belts = repository.findAllBottoms();
         }
-        if (belts.isEmpty()) {
-            throw new NotFoundException(String.format("belts not found, bottoms=%s", belts));
-        }
-        return mapper.mapToBeltsDto(belts);
-    }
-
-    @Override
-    public void delete(Long id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-        }
-        throw new NotFoundException(String.format("belt with id = %s not found for delete", id));
+        return belts;
     }
 
     private void validateIds(List<Long> ids) {

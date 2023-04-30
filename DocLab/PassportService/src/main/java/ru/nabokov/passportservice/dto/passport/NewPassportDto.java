@@ -5,11 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.nabokov.passportservice.dto.DimensionDto;
-import ru.nabokov.passportservice.model.Protection;
+import ru.nabokov.passportservice.dto.repair.NewRepairDto;
+import ru.nabokov.passportservice.dto.survey.NewSurveyDto;
+import ru.nabokov.passportservice.dto.сharacteristic.NewCharacteristicDto;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.time.LocalDate;
+import java.util.List;
 
 @Setter
 @Getter
@@ -17,26 +19,20 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class NewPassportDto {
 
-    @Schema(description = "Индентификатор")
+    @Schema(description = "Индентификатор объекта обследования")
     @NotNull(message = "id object data should not be blank")
     @Positive(message = "id object data can only be positive")
     private Long objectDataId;
-    private Long authorId;
-    private String projectNumber;
-    private Long manufacturerId;
-    private Long mountingId;
-    private String manufacture;
-    private LocalDate installation;
-    private LocalDate operation;
-    private LocalDate startPassport;
-    private DimensionDto dimension;
-    private Float heightPipe;
-    private Protection protection;
-    private Integer estimatedLife;
-    private Integer pressure;
-    private String directPressure;
-    private String directTemperature;
-    private String backPressure;
-    private String backTemperature;
-    private String temperature;
+    @Schema(description = "Характеристики объекта обследования")
+    @NotNull(message = "characteristics should not be blank")
+    @NotEmpty(message = "characteristics should not be empty")
+    private List<NewCharacteristicDto> characteristics;
+    @Schema(description = "Характеристики объекта обследования")
+    @NotNull(message = "characteristics should not be blank")
+    @NotEmpty(message = "characteristics should not be empty")
+    private List<NewRepairDto> repairs;
+    @Schema(description = "Характеристики объекта обследования")
+    @NotNull(message = "characteristics should not be blank")
+    @NotEmpty(message = "characteristics should not be empty")
+    private List<NewSurveyDto> surveys;
 }

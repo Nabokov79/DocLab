@@ -51,8 +51,10 @@ public class ObjectDataController {
     @GetMapping
     public ResponseEntity<List<ObjectDataDto>> getAll(
                                                   @RequestParam(required = false)
+                                                  @Parameter(description = "Список индентификаторов") String ids,
+                                                  @RequestParam(required = false)
                                                   @Parameter(description = "Индентификатор типа объекта") Long typeId) {
-        return ResponseEntity.ok().body(service.getAll(typeId));
+        return ResponseEntity.ok().body(service.getAll(ids, typeId));
     }
 
     @Operation(summary = "Удаление данных объекта")

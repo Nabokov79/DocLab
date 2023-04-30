@@ -10,6 +10,9 @@ import ru.nabokov.dataservice.exceptions.NotFoundException;
 import ru.nabokov.dataservice.mapper.OrganizationMapper;
 import ru.nabokov.dataservice.model.Organization;
 import ru.nabokov.dataservice.repository.OrganizationRepository;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -48,7 +51,14 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public List<OrganizationDto> getAll() {
+    public List<OrganizationDto> getAll(String ids) {
+        if (ids != null) {
+            return  mapper.mapToOrganizationsDto(
+                 new ArrayList<>(repository.findAllByIds(
+                      Arrays.stream(ids.split(",")).toList().stream().mapToLong(Long::parseLong).boxed().toList())
+                    )
+            );
+        }
         return mapper.mapToOrganizationsDto(repository.findAll());
     }
 

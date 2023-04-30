@@ -15,7 +15,7 @@ public interface ObjectDataService {
 
     ObjectDataDto get(Long id);
 
-    List<ObjectDataDto> getAll(Long typeId);
+    List<ObjectDataDto> getAll(String ids, Long typeId);
 
     String delete(Long id);
 }

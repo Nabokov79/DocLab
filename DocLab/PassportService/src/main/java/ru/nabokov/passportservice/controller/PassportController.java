@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.nabokov.passportservice.dto.passport.*;
-import ru.nabokov.passportservice.mapper.PassportMapper;
 import ru.nabokov.passportservice.service.PassportService;
 
 import java.util.List;
@@ -26,7 +25,6 @@ import java.util.List;
 public class PassportController {
 
     private final PassportService service;
-    private final PassportMapper mapper;
 
     @Operation(summary = "Добавление новых данных паспорта")
     @PostMapping
@@ -43,45 +41,16 @@ public class PassportController {
     }
 
     @Operation(summary = "Получить паспорт бака")
-    @GetMapping("/tank/{id}")
-    public ResponseEntity<TankPassportDto> getTankPassport(
-                                                    @PathVariable @Parameter(description = "Индентификатор") Long id) {
-        return ResponseEntity.ok().body(mapper. mapToTankPassportDto(service.get(id)));
-    }
-
-    @Operation(summary = "Получить данные паспорта трубопровода")
-    @GetMapping("/pipeline/{id}")
-    public ResponseEntity<PipelinePassportDto> getPipelinePassport(
-                                                    @PathVariable @Parameter(description = "Индентификатор") Long id) {
-        return ResponseEntity.ok().body(mapper.mapToPipelinePassportDto(service.get(id)));
-    }
-
-    @Operation(summary = "Получить данные паспорта мазутопровода")
-    @GetMapping("/pipeline/oil/{id}")
-    public ResponseEntity<OilPipelinePassportDto> getOilPipelinePassport(
-                                                    @PathVariable @Parameter(description = "Индентификатор") Long id) {
-        return ResponseEntity.ok().body(mapper.mapToOilPipelinePassportDto(service.get(id)));
-    }
-
-    @Operation(summary = "Получить данные паспорта фильтра")
-    @GetMapping("/filter/{id}")
-    public ResponseEntity<FilterPassportDto> getFilterPassport(
-                                                    @PathVariable @Parameter(description = "Индентификатор") Long id) {
-        return ResponseEntity.ok().body(mapper.mapToFilterPassportDto(service.get(id)));
-    }
-
-    @Operation(summary = "Получить данные паспорта котла")
-    @GetMapping("/boiler/{id}")
-    public ResponseEntity<BoilerPassportDto> getBoilerPassportDto(
-            @PathVariable @Parameter(description = "Индентификатор") Long id) {
-        return ResponseEntity.ok().body(mapper.mapToBoilerPassportDto(service.get(id)));
+    @GetMapping("/{id}")
+    public ResponseEntity<PassportDto> get(@PathVariable @Parameter(description = "Индентификатор") Long id) {
+        return ResponseEntity.ok().body(service.get(id));
     }
 
     @Operation(summary = "Получение данные паспортов")
     @GetMapping
-    public ResponseEntity<List<PassportDto>> getAll(@RequestParam(required = false)
-                                                        @Parameter(description = "Индентификатор типа объекта") Long typeId) {
-        return ResponseEntity.ok().body(mapper.mapToPassportDto(service.getAll(typeId)));
+    public ResponseEntity<List<ShortPassportDto>> getAll(@RequestParam(required = false)
+                                                  @Parameter(description = "Индентификатор типа объекта") Long typeId) {
+        return ResponseEntity.ok().body(service.getAll(typeId));
     }
 
     @Operation(summary = "Удаление данные паспорта")
